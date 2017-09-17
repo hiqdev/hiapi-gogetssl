@@ -1,0 +1,8 @@
+package:
+    type:           yii2-extension
+    name:           hiapi-gogetssl
+    title:          hiAPI GoGetSSL plugin
+    headline:       hiAPI GoGetSSL
+    keywords:       hiapi, gogetssl
+    description:    |
+        GoGetSSL plugin for hiAPI
