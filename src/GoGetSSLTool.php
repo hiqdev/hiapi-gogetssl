@@ -1,10 +1,8 @@
 <?PHP
 
-namespace hiapi\gogetssl\tools;
+namespace hiapi\gogetssl;
 
-require_once __DIR__ . '/../vendor/GoGetSSLApi.php';
-
-use GoGetSSLApi;
+use hiapi\gogetssl\vendor\GoGetSSLApi;
 use err;
 
 /**
