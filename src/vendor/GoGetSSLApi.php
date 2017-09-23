@@ -6,7 +6,8 @@ namespace hiapi\gogetssl\vendor;
  * Use any way you want. Free for all
  *
  * @version 1.1
- * */
+ */
+
 # error_reporting(E_ALL);
 # ini_set('display_errors', 'on');
 # mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

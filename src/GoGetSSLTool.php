@@ -1,9 +1,17 @@
-<?PHP
+<?php
+/**
+ * hiAPI GoGetSSL plugin
+ *
+ * @link      https://github.com/hiqdev/hiapi-gogetssl
+ * @package   hiapi-gogetssl
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ */
 
 namespace hiapi\gogetssl;
 
-use hiapi\gogetssl\vendor\GoGetSSLApi;
 use err;
+use hiapi\gogetssl\vendor\GoGetSSLApi;
 
 /**
  * GoGetSSL certificate tool.
@@ -15,21 +23,21 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     protected $api;
     protected $isConnected = null;
 
-    static protected $supplier = [
+    protected static $supplier = [
         'comodo' => 1,
         'geotrust' => 2,
         'symantec' => 2,
         'thawte' => 2,
     ];
 
-    static protected $orderRequired =
+    protected static $orderRequired =
         'product_id,period,csr,server_count,webserver_type,' .
         'admin_firstname,admin_lastname,admin_phone,admin_title,admin_email,' .
         'dcv_method,' .
         'tech_firstname,tech_lastname,tech_phone,tech_title,tech_email,' .
         'signature_hash';
 
-    static protected $orderParametrs =
+    protected static $orderParametrs =
         'product_id,period,csr,server_count,approver_email,approver_emails,webserver_type,' .
         'dns_names,admin_firstname,admin_lastname,admin_organization,admin_addressline1,' .
         'admin_phone,admin_title,admin_email,admin_city,admin_country,admin_fax,admin_postalcode,' .
@@ -38,7 +46,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         'tech_region,org_name,org_division,org_duns,org_addressline1,org_city,org_country,' .
         'org_fax,org_phone,org_postalcode,org_region,signature_hash';
 
-    static protected $renamedOrderFields = [
+    protected static $renamedOrderFields = [
         'street1' => 'addressline1',
         'postal_code' => 'postalcode',
         'state' => 'region',
@@ -48,7 +56,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         'fax_phone' => 'fax',
     ];
 
-    static protected $defaultOrderFieldValue = [
+    protected static $defaultOrderFieldValue = [
         'title' => 'Mr',
         'server_count' => -1,
         'webserver' => 'nginx',
@@ -63,7 +71,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         $this->api = new GoGetSSLApi(null, $data['url']);
     }
 
-/// CHECK ERROR
+    /// CHECK ERROR
     private function isError($res, $loginRequired = false)
     {
         if (err::is($res) || isset($res['error'])) {
@@ -76,10 +84,10 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             return true;
         }
 
-        return ! ($res['success'] === true);
+        return !($res['success'] === true);
     }
 
-    static protected function _transformKey($key)
+    protected static function _transformKey($key)
     {
         $key = preg_replace('/[^a-zA-Z0-9_]/','_', $key);
         while (preg_match('/__/', $key)) {
@@ -89,7 +97,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return trim(strtolower($key), " \t\n\r\0\x0B_");
     }
 
-/// LOGIN, REQUEST, RESPONSE
+    /// LOGIN, REQUEST, RESPONSE
     private function login()
     {
         $res = $this->api->auth($this->data['login'], $this->data['password']);
@@ -127,7 +135,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $res;
     }
 
-/// GENERAL COMMANDS
+    /// GENERAL COMMANDS
     public function certificatesGetAllProducts()
     {
         $response = $this->request('getAllProducts');
@@ -160,4 +168,4 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     {
         return $this->request('getOrderStatus', [$row['remoteid']]);
     }
-};
+}
