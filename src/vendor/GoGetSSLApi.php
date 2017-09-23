@@ -1,5 +1,7 @@
 <?php
 
+namespace hiapi\gogetssl\vendor;
+
 /**
  * Use any way you want. Free for all
  *
@@ -12,8 +14,13 @@
 # define('DEBUG', 'TRUE');
 define('DEBUG', 'FALSE');
 
-class GoGetSSLApi {
-
+/**
+ * GoGetSSL API implementation.
+ *
+ * Found somewhere on the internet...
+ */
+class GoGetSSLApi
+{
     protected $apiUrl = 'https://my.gogetssl.com/api';
     protected $key;
     protected $lastStatus;
@@ -139,7 +146,7 @@ class GoGetSSLApi {
 
         return $this->call('/tools/webservers/' . (int) $type, $getData);
     }
-    
+
     public function getDomainAlternative($csr = null) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
@@ -223,7 +230,7 @@ class GoGetSSLApi {
 
         return $this->call('/products/', $getData);
     }
-    
+
     public function getProduct($productId) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
@@ -235,7 +242,7 @@ class GoGetSSLApi {
 
         return $this->call('/products/ssl/' . $productId, $getData);
     }
-    
+
     public function getProducts() {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
@@ -379,7 +386,7 @@ class GoGetSSLApi {
 
         return $this->call('/orders/add_ssl_order1/', $getData, $data);
     }
-    
+
     public function addSSLOrder($data) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
@@ -427,7 +434,7 @@ class GoGetSSLApi {
 
         return $this->call('/orders/ssl/activate/' . (int) $orderId, $getData);
     }
-    
+
     public function addSandboxAccount($data) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
@@ -437,7 +444,7 @@ class GoGetSSLApi {
             );
         }
 
-        return $this->call('/accounts/sandbox/add/', $getData, $data);        
+        return $this->call('/accounts/sandbox/add/', $getData, $data);
     }
 
     public function getOrderStatus($orderId) {
@@ -535,7 +542,7 @@ class GoGetSSLApi {
         return $this->call('/tools/csr/generate/', $getData, $data);
     }
 
-    protected function call($uri, $getData = array(), $postData = array(), $forcePost = false, $isFile = false) {        
+    protected function call($uri, $getData = array(), $postData = array(), $forcePost = false, $isFile = false) {
         $url = $this->apiUrl . $uri;
         if (!empty($getData)) {
             foreach ($getData as $key => $value) {
@@ -589,14 +596,6 @@ class GoGetSSLApi {
 
     public function getLastResponse() {
         return $this->lastResponse;
-    }
-
-}
-
-class GoGetSSLAuthException extends Exception {
-
-    public function __construct() {
-        parent::__construct('Please authorize first');
     }
 
 }
