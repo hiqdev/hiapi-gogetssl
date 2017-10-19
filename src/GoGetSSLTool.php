@@ -168,4 +168,9 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     {
         return $this->request('getOrderStatus', [$row['remoteid']]);
     }
+
+    public function certificateReissue($row)
+    {
+        // TODO: Certificate Reissue
+    }
 }
