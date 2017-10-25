@@ -116,6 +116,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
         $res = call_user_func_array([$this->api, $command], $args);
 
+
         return $this->response(['command' => $command, 'args' => $args], $res, $loginRequired);
     }
 
@@ -171,6 +172,23 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateReissue($row)
     {
-        // TODO: Certificate Reissue
+        $response = $this->request('reIssueOrder', [$row['order_id'], $row]);
+
+        return $response;
+    }
+
+    public function certificateGenerateCSR($row)
+    {
+        return  $this->request('generateCSR', [$row, $row]);
+    }
+
+    public function certificateGetDomainEmails($row)
+    {
+        return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
+    }
+
+    public function certificateGetWebservers($row)
+    {
+        return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
     }
 }
