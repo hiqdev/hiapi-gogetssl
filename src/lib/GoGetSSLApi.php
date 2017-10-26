@@ -1,6 +1,6 @@
 <?php
 
-namespace hiapi\gogetssl\vendor;
+namespace hiapi\gogetssl\lib;
 
 /**
  * Use any way you want. Free for all

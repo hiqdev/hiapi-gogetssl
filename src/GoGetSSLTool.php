@@ -14,7 +14,7 @@ use dot;
 use err;
 use cfg;
 use Closure;
-use hiapi\gogetssl\vendor\GoGetSSLApi;
+use hiapi\gogetssl\lib\GoGetSSLApi;
 
 /**
  * GoGetSSL certificate tool.
