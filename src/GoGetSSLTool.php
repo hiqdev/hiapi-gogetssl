@@ -10,7 +10,10 @@
 
 namespace hiapi\gogetssl;
 
+use dot;
 use err;
+use cfg;
+use Closure;
 use hiapi\gogetssl\vendor\GoGetSSLApi;
 
 /**
@@ -23,50 +26,31 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     protected $api;
     protected $isConnected = null;
 
-    protected static $supplier = [
-        'comodo' => 1,
-        'geotrust' => 2,
-        'symantec' => 2,
-        'thawte' => 2,
-    ];
-
-    protected static $orderRequired =
-        'product_id,period,csr,server_count,webserver_type,' .
-        'admin_firstname,admin_lastname,admin_phone,admin_title,admin_email,' .
-        'dcv_method,' .
-        'tech_firstname,tech_lastname,tech_phone,tech_title,tech_email,' .
-        'signature_hash';
-
-    protected static $orderParametrs =
-        'product_id,period,csr,server_count,approver_email,approver_emails,webserver_type,' .
-        'dns_names,admin_firstname,admin_lastname,admin_organization,admin_addressline1,' .
-        'admin_phone,admin_title,admin_email,admin_city,admin_country,admin_fax,admin_postalcode,' .
-        'admin_region,dcv_method,tech_firstname,tech_lastname,tech_organization,tech_addressline1,' .
-        'tech_phone,tech_title,tech_email,tech_city,tech_country,tech_fax,tech_postalcode,' .
-        'tech_region,org_name,org_division,org_duns,org_addressline1,org_city,org_country,' .
-        'org_fax,org_phone,org_postalcode,org_region,signature_hash';
-
-    protected static $renamedOrderFields = [
-        'street1' => 'addressline1',
-        'postal_code' => 'postalcode',
-        'state' => 'region',
-        'first_name' => 'firstname',
-        'last_name' => 'lastname',
-        'voice_phone' => 'phone',
-        'fax_phone' => 'fax',
-    ];
-
-    protected static $defaultOrderFieldValue = [
-        'title' => 'Mr',
-        'server_count' => -1,
-        'webserver' => 'nginx',
-        'amount' => 1,
-        'dcv_method' => 'dns',
-        'signature_hash' => 'SHA2',
-    ];
+    protected static $debugCsr = '-----BEGIN CERTIFICATE REQUEST-----
+MIIC2TCCAcECAQAwgZMxCzAJBgNVBAYTAkNZMRUwEwYDVQQIDAxHZXJtYXNzb2dl
+aWExETAPBgNVBAcMCExpbWFzc29sMRMwEQYDVQQKDApiaXN0cm9ob3N0MQswCQYD
+VQQLDAJJVDEXMBUGA1UEAwwOYmlzdHJvaG9zdC5jb20xHzAdBgkqhkiG9w0BCQEW
+EGR2YnJpZ2FAaW5ib3gubHYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB
+AQCeZEh8LP1XCLJajK3gmiBb8ZXzyr0eZqku7wS+DDEauMwkGRrzLFTiYhGUqbDE
+u3M8+ylFj1Ks1VE3O5/3izx3lLh6Axw1CHRQ4FrVp3FgqGobhu6kiN9qShy2QDbW
+sRNr8qDGsn8cVCQZSPdDOdRo+BuQhDepODyk11sQSQlmDrqory5Am4e5SQj5daaU
+2WhvGm+M3yteTln7zxxdjfLbOm80SaFELl5dXVh+SeoJ9tONuuP+pCEETWTmss3U
+MMbGSdlPvHKMyLZ9/2BgyxV7IrxzN6pnOOznyR4+hlQhw0EfevYirbCI/usWhwFN
+CvDUoXKbKzmayCUPtRj9BURpAgMBAAGgADANBgkqhkiG9w0BAQUFAAOCAQEAW7dM
+NebhwSRap7OTf22qirTleB1y0PZguxk9DkwiaPjNlR7asg6Wdksmm8Wq03kk4x8Q
+wRwlzaanhH5oNUQ4pmIeyHDr5FfyvqADNNq0PsNQB2hYcYnsCLBgU0iCcj4826sK
+kMgENwKdAb3TnZdTE/qQrw2DlRYz+19YDWiqMOQQkGT5sc3aTbuZQfbtUYOs3g6W
+1I60eILxGZskXkd418s8Yg2J7qhgJtqUwhTFnisuYXH5eh3+IEXUgAVwQm4j8Tu5
+eYKxGQBu3EZ5RvX+mCL/EedxU2G0rICAf7HhXYh+RoiMuklXdVZb6w8+ku4CvWge
+LOTzFN1dURYXhRAH7Q==
+-----END CERTIFICATE REQUEST-----';
 
     public function __construct($base, $data=null)
     {
+        if (cfg::get('DEBUG_GOGETSSL')) {
+            $data['url'] = "https://sandbox.gogetssl.com/api/";
+            $data['password'] = "7zL382JO1uyVvoT";
+        }
         parent::__construct($base, $data);
         $this->api = new GoGetSSLApi(null, $data['url']);
     }
@@ -190,5 +174,116 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     public function certificateGetWebservers($row)
     {
         return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
+    }
+
+/// ORDER
+    public function certificateOrder($row = [])
+    {
+        $data = $this->_prepareOrderData($row);
+        if (err::is($data)) {
+            return $data;
+        }
+
+        return $this->request('addSSLOrder', [$data]);
+    }
+
+    protected function _prepareOrderData($row)
+    {
+        $row = $this->_prepareOrderContacts($row);
+        $row['product'] = $this->_certificateGetProduct($row['product']);
+        if (err::is($row)) return $row;
+
+        $fields = $this->_prepareOrderFields($row);
+        foreach ($fields as $field => $def) {
+            if ($def instanceof Closure) {
+                $data[$field] = call_user_func($def, $row);
+            } else {
+                $data[$field] = dot::get($row, $def);
+            }
+        }
+
+        return $data;
+    }
+
+    protected function _prepareOrderFields($data)
+    {
+        return [
+            'product_id'        => 'product.id',
+            'period'            => function ($row) {
+                return 12*($row['amount'] ?: 1);
+            },
+            'dcv_method'        => 'dcv_method',
+            'approver_email'    => 'approver_email',
+            'server_count'		=> function ($row) {
+                return $row['server_count'] ?: -1;
+            },
+            'webserver_type'    => function ($row) {
+                return $row['webserver_type'] ?: 'nginx';
+            },
+            'csr'               => function ($row) {
+                if (empty($row['csr']) && cfg::get('DEBUG_GOGETSSL')) {
+                    return static::$debugCsr;
+                }
+
+                return $row['csr'];
+            },
+            'admin_firstname'   => 'admin.first_name',
+            'admin_lastname'    => 'admin.last_name',
+            'admin_email'       => 'admin.email',
+            'admin_title'       => function ($row) {
+                return $this->_prepareContactTitle($row['admin']);
+            },
+            'admin_phone'       => function ($row) {
+                return $this->_prepareContactPhone($row['admin']['phone']);
+            },
+            'tech_firstname'    => 'tech.first_name',
+            'tech_lastname'     => 'tech.last_name',
+            'tech_email'        => 'tech.email',
+            'tech_title'        => function ($row) {
+                return $this->_prepareContactTitle($row['tech']);
+            },
+            'tech_phone'        => function ($row) {
+                return $this->_prepareContactPhone($row['tech']['phone']);
+            },
+        ];
+    }
+
+    protected function _certificateGetProduct($name)
+    {
+        $products = $this->certificatesGetAllProducts();
+
+        return $products[$name] ?? null;
+    }
+
+    protected function _prepareOrderContacts($row)
+    {
+        $types = ['admin', 'tech', 'org'];
+        $ids = [];
+        foreach ($types as $type) {
+            $key = $type . '_id';
+            if (empty($row[$key])) {
+                return err::set($row, 'no data given', ['field' => $key]);
+            }
+            $ids[$type] = $row[$key];
+        }
+        $contacts = $this->base->contactsSearch(['ids' => array_unique($ids)]);
+        if (err::is($contacts)) {
+            return err::set($row, err::get($contacts));
+        }
+        foreach ($ids as $type => $id) {
+            $row[$type] = $contacts[$id];
+        }
+
+        return $row;
+    }
+
+    protected function _prepareContactTitle($contact)
+    {
+        return empty($contact['title']) ? 'Mr.' : $row['title'];
+    }
+
+    protected function _prepareContactPhone($phone)
+    {
+        return preg_replace('/[^0-9]/', '', $phone);
     }
 }
