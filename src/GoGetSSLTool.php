@@ -10,10 +10,10 @@
 
 namespace hiapi\gogetssl;
 
-use dot;
-use err;
 use cfg;
 use Closure;
+use dot;
+use err;
 use hiapi\gogetssl\lib\GoGetSSLApi;
 
 /**
@@ -48,8 +48,8 @@ LOTzFN1dURYXhRAH7Q==
     public function __construct($base, $data=null)
     {
         if (cfg::get('DEBUG_GOGETSSL')) {
-            $data['url'] = "https://sandbox.gogetssl.com/api/";
-            $data['password'] = "7zL382JO1uyVvoT";
+            $data['url'] = 'https://sandbox.gogetssl.com/api/';
+            $data['password'] = '7zL382JO1uyVvoT';
         }
         parent::__construct($base, $data);
         $this->api = new GoGetSSLApi(null, $data['url']);
@@ -99,7 +99,6 @@ LOTzFN1dURYXhRAH7Q==
         }
 
         $res = call_user_func_array([$this->api, $command], $args);
-
 
         return $this->response(['command' => $command, 'args' => $args], $res, $loginRequired);
     }
@@ -176,7 +175,7 @@ LOTzFN1dURYXhRAH7Q==
         return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
     }
 
-/// ORDER
+    /// ORDER
     public function certificateOrder($row = [])
     {
         $data = $this->_prepareOrderData($row);
@@ -191,7 +190,9 @@ LOTzFN1dURYXhRAH7Q==
     {
         $row = $this->_prepareOrderContacts($row);
         $row['product'] = $this->_certificateGetProduct($row['product']);
-        if (err::is($row)) return $row;
+        if (err::is($row)) {
+            return $row;
+        }
 
         $fields = $this->_prepareOrderFields($row);
         foreach ($fields as $field => $def) {
@@ -214,7 +215,7 @@ LOTzFN1dURYXhRAH7Q==
             },
             'dcv_method'        => 'dcv_method',
             'approver_email'    => 'approver_email',
-            'server_count'		=> function ($row) {
+            'server_count'      => function ($row) {
                 return $row['server_count'] ?: -1;
             },
             'webserver_type'    => function ($row) {

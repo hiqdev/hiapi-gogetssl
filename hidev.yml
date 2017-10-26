@@ -6,3 +6,8 @@ package:
     keywords:       hiapi, gogetssl
     description:    |
         GoGetSSL plugin for hiAPI
+
+.php_cs:
+    finder:
+        notPath:
+            - src/lib
