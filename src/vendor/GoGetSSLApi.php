@@ -563,6 +563,7 @@ class GoGetSSLApi
             curl_setopt($c, CURLOPT_POSTFIELDS, $queryData);
         }
 
+        /// var_dump($url . $queryData);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
 
