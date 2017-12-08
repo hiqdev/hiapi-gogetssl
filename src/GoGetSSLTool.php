@@ -130,13 +130,6 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $this->request('getOrderStatus', [$row['remoteid']]);
     }
 
-    public function certificateReissue($row)
-    {
-        $response = $this->request('reIssueOrder', [$row['order_id'], $row]);
-
-        return $response;
-    }
-
     public function certificateGenerateCSR($row)
     {
         return  $this->request('generateCSR', [$row, $row]);
@@ -152,7 +145,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
     }
 
-    /// ISSUE
+    /// ISSUE, REISSUE, RENEW
     public function certificateIssue($row = [])
     {
         $data = $this->_prepareOrderData($row);
@@ -161,6 +154,13 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         }
 
         return $this->request('addSSLOrder', [$data]);
+    }
+
+    public function certificateReissue($row)
+    {
+        $response = $this->request('reIssueOrder', [$row['order_id'], $row]);
+
+        return $response;
     }
 
     protected function _prepareOrderData($row)
