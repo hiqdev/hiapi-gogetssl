@@ -47,10 +47,6 @@ LOTzFN1dURYXhRAH7Q==
 
     public function __construct($base, $data=null)
     {
-        if (cfg::get('DEBUG_GOGETSSL')) {
-            $data['url'] = 'https://sandbox.gogetssl.com/api/';
-            $data['password'] = '7zL382JO1uyVvoT';
-        }
         parent::__construct($base, $data);
         $this->api = new GoGetSSLApi(null, $data['url']);
     }
