@@ -24,26 +24,8 @@ use hiapi\gogetssl\lib\GoGetSSLApi;
 class GoGetSSLTool extends \hiapi\components\AbstractTool
 {
     protected $api;
-    protected $isConnected = null;
 
-    protected static $debugCsr = '-----BEGIN CERTIFICATE REQUEST-----
-MIIC2TCCAcECAQAwgZMxCzAJBgNVBAYTAkNZMRUwEwYDVQQIDAxHZXJtYXNzb2dl
-aWExETAPBgNVBAcMCExpbWFzc29sMRMwEQYDVQQKDApiaXN0cm9ob3N0MQswCQYD
-VQQLDAJJVDEXMBUGA1UEAwwOYmlzdHJvaG9zdC5jb20xHzAdBgkqhkiG9w0BCQEW
-EGR2YnJpZ2FAaW5ib3gubHYwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB
-AQCeZEh8LP1XCLJajK3gmiBb8ZXzyr0eZqku7wS+DDEauMwkGRrzLFTiYhGUqbDE
-u3M8+ylFj1Ks1VE3O5/3izx3lLh6Axw1CHRQ4FrVp3FgqGobhu6kiN9qShy2QDbW
-sRNr8qDGsn8cVCQZSPdDOdRo+BuQhDepODyk11sQSQlmDrqory5Am4e5SQj5daaU
-2WhvGm+M3yteTln7zxxdjfLbOm80SaFELl5dXVh+SeoJ9tONuuP+pCEETWTmss3U
-MMbGSdlPvHKMyLZ9/2BgyxV7IrxzN6pnOOznyR4+hlQhw0EfevYirbCI/usWhwFN
-CvDUoXKbKzmayCUPtRj9BURpAgMBAAGgADANBgkqhkiG9w0BAQUFAAOCAQEAW7dM
-NebhwSRap7OTf22qirTleB1y0PZguxk9DkwiaPjNlR7asg6Wdksmm8Wq03kk4x8Q
-wRwlzaanhH5oNUQ4pmIeyHDr5FfyvqADNNq0PsNQB2hYcYnsCLBgU0iCcj4826sK
-kMgENwKdAb3TnZdTE/qQrw2DlRYz+19YDWiqMOQQkGT5sc3aTbuZQfbtUYOs3g6W
-1I60eILxGZskXkd418s8Yg2J7qhgJtqUwhTFnisuYXH5eh3+IEXUgAVwQm4j8Tu5
-eYKxGQBu3EZ5RvX+mCL/EedxU2G0rICAf7HhXYh+RoiMuklXdVZb6w8+ku4CvWge
-LOTzFN1dURYXhRAH7Q==
------END CERTIFICATE REQUEST-----';
+    protected $isConnected = null;
 
     public function __construct($base, $data=null)
     {
@@ -217,13 +199,7 @@ LOTzFN1dURYXhRAH7Q==
             'webserver_type'    => function ($row) {
                 return $row['webserver_type'] ?: 'nginx';
             },
-            'csr'               => function ($row) {
-                if (empty($row['csr']) && cfg::get('DEBUG_GOGETSSL')) {
-                    return static::$debugCsr;
-                }
-
-                return $row['csr'];
-            },
+            'csr'               => 'csr',
             'admin_firstname'   => 'admin.first_name',
             'admin_lastname'    => 'admin.last_name',
             'admin_email'       => 'admin.email',
