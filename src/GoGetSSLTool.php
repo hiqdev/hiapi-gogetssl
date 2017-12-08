@@ -171,8 +171,8 @@ LOTzFN1dURYXhRAH7Q==
         return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
     }
 
-    /// ORDER
-    public function certificateOrder($row = [])
+    /// ISSUE
+    public function certificateIssue($row = [])
     {
         $data = $this->_prepareOrderData($row);
         if (err::is($data)) {
