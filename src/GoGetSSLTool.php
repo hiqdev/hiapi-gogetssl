@@ -10,7 +10,6 @@
 
 namespace hiapi\gogetssl;
 
-use cfg;
 use Closure;
 use dot;
 use err;
