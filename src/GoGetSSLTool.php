@@ -156,6 +156,16 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $this->request('addSSLOrder', [$data]);
     }
 
+    public function certificateRenew($row = [])
+    {
+        $data = $this->_prepareOrderData($row);
+        if (err::is($data)) {
+            return $data;
+        }
+
+        return $this->request('addSSLRenewOrder', [$data]);
+    }
+
     public function certificateReissue($row)
     {
         $response = $this->request('reIssueOrder', [$row['order_id'], $row]);
