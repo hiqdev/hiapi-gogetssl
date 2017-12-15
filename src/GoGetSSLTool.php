@@ -137,7 +137,15 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateGetDomainEmails($row)
     {
-        return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
+        $res = $this->request('getDomainEmails', [$row['domain']]);
+        $emails = [];
+        foreach ($res as $list) {
+            if (is_array($list)) {
+                $emails = array_merge($emails, $list);
+            }
+        }
+
+        return array_unique($emails);
     }
 
     public function certificateGetWebservers($row)
