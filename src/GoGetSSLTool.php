@@ -135,6 +135,32 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return  $this->request('generateCSR', [$row, $row]);
     }
 
+    public function certificateDecodeCSR($row)
+    {
+        $res = $this->request('decodeCSR', [$row['csr'], $row['brand'], $row['wildcard']]);
+        if (err::is($res)) {
+            return $res;
+        }
+        $info = $res['csrResult'];
+        static $fields = [
+            'CN'     => 'csr_commonname',
+            'O'      => 'csr_organization',
+            'OU'     => 'csr_department',
+            'L'      => 'csr_city',
+            'S'      => 'csr_state',
+            'C'      => 'csr_country',
+            'Email'  => 'csr_email',
+        ];
+        $data = [
+            'csr' => $row['csr']
+        ];
+        foreach ($fields as $from => $field) {
+            $data[$field] = empty($info[$from]) ? null : $info[$from];
+        }
+
+        return $data;
+    }
+
     public function certificateGetDomainEmails($row)
     {
         $res = $this->request('getDomainEmails', [$row['domain']]);
