@@ -132,7 +132,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateGenerateCSR($row)
     {
-        return  $this->request('generateCSR', [$row, $row]);
+        return $this->request('generateCSR', [$row]);
     }
 
     public function certificateDecodeCSR($row)
