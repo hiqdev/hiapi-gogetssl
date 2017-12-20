@@ -174,9 +174,16 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return array_unique($emails);
     }
 
-    public function certificateGetWebservers($row)
+    public function certificateGetWebserverTypes($row)
     {
-        return $this->request('getDomainEmails', [['domain' => $row['fqdn']]]);
+        $supplier_id = 'comodo' === strtolower($row['supplier']) ? 1 : 2;
+
+        $data = $this->request('getWebservers', [$supplier_id]);
+        if (err::is($data)) {
+            return $data;
+        }
+
+        return $data['webservers'];
     }
 
     /// ISSUE, REISSUE, RENEW
@@ -240,7 +247,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
                 return $row['server_count'] ?: -1;
             },
             'webserver_type'    => function ($row) {
-                return $row['webserver_type'] ?: 'nginx';
+                return ((int)$row['webserver_type']) ?: 1;
             },
             'csr'               => 'csr',
             'admin_firstname'   => 'admin.first_name',
