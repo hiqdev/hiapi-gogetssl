@@ -127,7 +127,14 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateInfo($row)
     {
-        return $this->request('getOrderStatus', [$row['remoteid']]);
+        $info = $this->request('getOrderStatus', [$row['remoteid']]);
+        if (err::is($info)) {
+            return $info;
+        }
+        $info['begins'] = $info['valid_from'] === '0000-00-00' ? '' : $info['valid_from'];
+        $info['expires'] = $info['valid_till'] === '0000-00-00' ? '' : $info['valid_till'];
+
+        return $info;
     }
 
     public function certificateGenerateCSR($row)
