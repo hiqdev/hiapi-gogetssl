@@ -131,6 +131,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         if (err::is($info)) {
             return $info;
         }
+        $info['name'] = $info['domain'];
         $info['begins'] = $info['valid_from'] === '0000-00-00' ? '' : $info['valid_from'];
         $info['expires'] = $info['valid_till'] === '0000-00-00' ? '' : $info['valid_till'];
 
