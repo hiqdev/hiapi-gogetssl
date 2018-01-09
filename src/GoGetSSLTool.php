@@ -317,4 +317,10 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     {
         return preg_replace('/[^0-9]/', '', $phone);
     }
+
+    /// CANCEL
+    public function certificateCancel($row)
+    {
+        return $this->request('cancelSSLOrder', [$row['remoteid'], $row['reason']]);
+    }
 }
