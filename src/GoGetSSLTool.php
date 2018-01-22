@@ -5,7 +5,7 @@
  * @link      https://github.com/hiqdev/hiapi-gogetssl
  * @package   hiapi-gogetssl
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiapi\gogetssl;
@@ -160,7 +160,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'Email'  => 'csr_email',
         ];
         $data = [
-            'csr' => $row['csr']
+            'csr' => $row['csr'],
         ];
         foreach ($fields as $from => $field) {
             $data[$field] = empty($info[$from]) ? null : $info[$from];
@@ -255,7 +255,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
                 return $row['server_count'] ?: -1;
             },
             'webserver_type'    => function ($row) {
-                return ((int)$row['webserver_type']) ?: 1;
+                return ((int) $row['webserver_type']) ?: 1;
             },
             'csr'               => 'csr',
             'admin_firstname'   => 'admin.first_name',
