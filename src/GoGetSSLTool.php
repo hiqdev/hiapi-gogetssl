@@ -135,6 +135,13 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         $info['begins'] = $info['valid_from'] === '0000-00-00' ? '' : $info['valid_from'];
         $info['expires'] = $info['valid_till'] === '0000-00-00' ? '' : $info['valid_till'];
 
+        $info['dcv_data'] = [];
+        if ($info['dcv_method'] === 'email') {
+            $info['dcv_data']['email'] = $info['approver_method'];
+        } elseif ($info['dcv_method'] === 'dns') {
+            $info['dcv_data']['dns'] = $info['approver_method']['dns'];
+        }
+
         return $info;
     }
 
