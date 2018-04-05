@@ -11,7 +11,7 @@
 return [
     'container' => [
         'definitions' => [
-            'gogetssl-tool' => [
+            'gogetsslTool' => [
                 'class' => \hiapi\gogetssl\GoGetSSLTool::class,
             ],
         ],
