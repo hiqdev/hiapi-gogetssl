@@ -142,6 +142,8 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             $info['dcv_data']['dns'] = $info['approver_method']['dns'];
         }
 
+        $info['dcv_data_alternate'] = $this->request('getDomainAlternative', [$info['csr_code']]);
+
         return $info;
     }
 
