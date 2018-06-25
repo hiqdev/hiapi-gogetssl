@@ -212,7 +212,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $this->request('resendValidationEmail', [$row['remoteid'], ['domain' => $row['fqdn']]]);
     }
 
-    public function certificateReValidate($row)
+    public function certificateRevalidate($row)
     {
         if ($row['dvc_method'] === 'email') {
             return err::set($row, 'dvc method is not compatible with operation');
