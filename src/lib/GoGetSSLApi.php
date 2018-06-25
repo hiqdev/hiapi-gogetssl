@@ -100,6 +100,18 @@ class GoGetSSLApi
         return $this->call('/orders/ssl/change_validation_email/' . (int) $orderId, $getData, $data);
     }
 
+    public function changeValidationMethod($orderId, $data) {
+        if (!$this->key) {
+            throw new GoGetSSLAuthException ();
+        } else {
+            $getData = array(
+                'auth_key' => $this->key
+            );
+        }
+
+        return $this->call('/orders/ssl/change_validation_method/' . (int) $orderId, $getData, $data);
+    }
+
     public function setKey($key) {
         if ($key) {
             $this->key = $key;
@@ -507,7 +519,7 @@ class GoGetSSLApi
         return $this->call('/orders/ssl/resend_validation_email/' . (int) $orderId, $getData);
     }
 
-    public function resendValidationEmail($orderId) {
+    public function resendValidationEmail($orderId, $data) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
         } else {
@@ -516,7 +528,20 @@ class GoGetSSLApi
             );
         }
 
-        return $this->call('/orders/ssl/resend_validation_email/' . (int) $orderId, $getData);
+        return $this->call('/orders/ssl/resend/' . (int) $orderId, $getData, $data);
+    }
+
+    public function revalidateCN($orderId, $data)
+    {
+        if (!$this->key) {
+            throw new GoGetSSLAuthException ();
+        } else {
+            $getData = array(
+                'auth_key' => $this->key,
+            );
+        }
+
+        return $this->call('/orders/ssl/revalidate/' . (int) $orderId, $getData, $data);
     }
 
     public function getCSR($data) {
