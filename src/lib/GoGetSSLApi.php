@@ -103,11 +103,10 @@ class GoGetSSLApi
     public function changeValidationMethod($orderId, $data) {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
-        } else {
-            $getData = array(
-                'auth_key' => $this->key
-            );
         }
+        $getData = [
+            'auth_key' => $this->key
+        ];
 
         return $this->call('/orders/ssl/change_validation_method/' . (int) $orderId, $getData, $data);
     }
@@ -535,11 +534,10 @@ class GoGetSSLApi
     {
         if (!$this->key) {
             throw new GoGetSSLAuthException ();
-        } else {
-            $getData = array(
-                'auth_key' => $this->key,
-            );
         }
+        $getData = [
+            'auth_key' => $this->key,
+        ];
 
         return $this->call('/orders/ssl/revalidate/' . (int) $orderId, $getData, $data);
     }
