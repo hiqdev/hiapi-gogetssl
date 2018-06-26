@@ -203,6 +203,32 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
         return $data['webservers'];
     }
 
+    public function certificateSendNotifications($row)
+    {
+        if ($row['dvc_method'] !== 'email') {
+            return err::set($row, 'email is required dvc method');
+        }
+
+        return $this->request('resendValidationEmail', [$row['remoteid'], ['domain' => $row['fqdn']]]);
+    }
+
+    public function certificateRevalidate($row)
+    {
+        if ($row['dvc_method'] === 'email') {
+            return err::set($row, 'dvc method is not compatible with operation');
+        }
+
+        return $this->request('revalidateCN', [$row['remoteid'], ['domain' => $row['fqdn']]]);
+    }
+
+    public function certificateChangeValidation($row)
+    {
+        return $this->request('changeValidationMethod', [
+            $row['remoteid'], [
+            'domain' => $row['fqdn'],
+            'new_method' => $row['dcv_method'] === 'email' ? $row['approver_email'] : $row['dcv_method'],
+        ]]);
+    }
     /// ISSUE, REISSUE, RENEW
     public function certificateIssue($row = [])
     {
@@ -332,4 +358,5 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
     {
         return $this->request('cancelSSLOrder', [$row['remoteid'], $row['reason']]);
     }
+
 }
