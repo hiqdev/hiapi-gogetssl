@@ -205,7 +205,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateSendNotifications($row)
     {
-        if ($row['dvc_method'] !== 'email') {
+        if ($row['dcv_method'] !== 'email') {
             return err::set($row, 'email is required dvc method');
         }
 
