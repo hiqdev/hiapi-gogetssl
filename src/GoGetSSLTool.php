@@ -205,8 +205,8 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateSendNotifications($row)
     {
-        if ($row['dvc_method'] !== 'email') {
-            return err::set($row, 'email is required dvc method');
+        if ($row['dcv_method'] !== 'email') {
+            return err::set($row, 'email is required dcv method');
         }
 
         return $this->request('resendValidationEmail', [$row['remoteid'], ['domain' => $row['fqdn']]]);
@@ -214,8 +214,8 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateRevalidate($row)
     {
-        if ($row['dvc_method'] === 'email') {
-            return err::set($row, 'dvc method is not compatible with operation');
+        if ($row['dcv_method'] === 'email') {
+            return err::set($row, 'dcv method is not compatible with operation');
         }
 
         return $this->request('revalidateCN', [$row['remoteid'], ['domain' => $row['fqdn']]]);
