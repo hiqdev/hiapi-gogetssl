@@ -296,21 +296,42 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'admin_firstname'   => 'admin.first_name',
             'admin_lastname'    => 'admin.last_name',
             'admin_email'       => 'admin.email',
+            'admin_organization'=> 'admin.organization',
+            'admin_city'        => 'admin.city',
+            'admin_country'     => 'admin.country_name',
             'admin_title'       => function ($row) {
                 return $this->_prepareContactTitle($row['admin']);
             },
             'admin_phone'       => function ($row) {
                 return $this->_prepareContactPhone($row['admin']['phone']);
             },
+            'admin_fax'         => function ($row) {
+                if (empty($row['admin']['fax'])) {
+                    return $this->_prepareContactPhone($row['admin']['phone']);
+                }
+
+                return $this->_prepareContactPhone($row['admin']['fax']);
+            },
             'tech_firstname'    => 'tech.first_name',
             'tech_lastname'     => 'tech.last_name',
             'tech_email'        => 'tech.email',
+            'tech_organization' => 'tech.organization',
+            'tech_city'         => 'tech.city',
+            'tech_country'      => 'tech.country_name',
             'tech_title'        => function ($row) {
                 return $this->_prepareContactTitle($row['tech']);
             },
             'tech_phone'        => function ($row) {
                 return $this->_prepareContactPhone($row['tech']['phone']);
             },
+            'org_name'          => 'org.organization',
+            'org_division'      => 'org.organization',
+            'org_addressline1'  => 'org.street1',
+            'org_city'          => 'org.city',
+            'org_country'       => 'org.country_name',
+            'org_phone'         => 'org.phone',
+            'org_postalcode'    => 'org.postal_code',
+            'org_region'        => 'org.province',
         ];
     }
 
