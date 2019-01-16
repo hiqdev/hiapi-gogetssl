@@ -9,11 +9,7 @@
  */
 
 return [
-    'container' => [
-        'definitions' => [
-            'gogetsslTool' => [
-                '__class' => \hiapi\gogetssl\GoGetSSLTool::class,
-            ],
-        ],
+    'gogetsslTool' => [
+        '__class' => \hiapi\gogetssl\GoGetSSLTool::class,
     ],
 ];
