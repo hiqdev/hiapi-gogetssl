@@ -8,12 +8,10 @@
  * @copyright Copyright (c) 2017-2018, HiQDev (http://hiqdev.com/)
  */
 
-return [
-    'container' => [
-        'definitions' => [
-            'gogetsslTool' => [
-                '__class' => \hiapi\gogetssl\GoGetSSLTool::class,
-            ],
-        ],
+$definitions = [
+    'gogetsslTool' => [
+        '__class' => \hiapi\gogetssl\GoGetSSLTool::class,
     ],
 ];
+
+return class_exists('Yii') ? ['container' => ['definitions' => $definitions]] : $definitions;
