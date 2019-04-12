@@ -11,8 +11,8 @@
 namespace hiapi\gogetssl;
 
 use Closure;
-use dot;
-use err;
+use hiapi\legacy\lib\deps\err;
+use hiapi\legacy\lib\deps\dot;
 use hiapi\gogetssl\lib\GoGetSSLApi;
 
 /**
