@@ -298,7 +298,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'admin_email'       => 'admin.email',
             'admin_organization'=> 'admin.organization',
             'admin_city'        => 'admin.city',
-            'admin_country'     => 'admin.country_name',
+            'admin_country'     => 'admin.country',
             'admin_title'       => function ($row) {
                 return $this->_prepareContactTitle($row['admin']);
             },
@@ -317,7 +317,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'tech_email'        => 'tech.email',
             'tech_organization' => 'tech.organization',
             'tech_city'         => 'tech.city',
-            'tech_country'      => 'tech.country_name',
+            'tech_country'      => 'tech.country',
             'tech_title'        => function ($row) {
                 return $this->_prepareContactTitle($row['tech']);
             },
@@ -328,7 +328,7 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'org_division'      => 'org.organization',
             'org_addressline1'  => 'org.street1',
             'org_city'          => 'org.city',
-            'org_country'       => 'org.country_name',
+            'org_country'       => 'org.country',
             'org_phone'         => 'org.phone',
             'org_postalcode'    => 'org.postal_code',
             'org_region'        => 'org.province',
