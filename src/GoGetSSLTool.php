@@ -154,10 +154,11 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
 
     public function certificateDecodeCSR($row)
     {
-        $res = $this->request('decodeCSR', [$row['csr'], $row['brand'], $row['wildcard']]);
+        $res = $this->request('decodeCSR', [$row['csr'], $row['brand'] ?? '', $row['wildcard'] ?? false]);
         if (err::is($res)) {
             return $res;
         }
+
         $info = $res['csrResult'];
         static $fields = [
             'CN'     => 'csr_commonname',
