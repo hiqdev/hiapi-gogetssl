@@ -609,7 +609,6 @@ class GoGetSSLApi
         }
 
         $status = curl_getinfo($c, CURLINFO_HTTP_CODE);
-        curl_close($c);
         $this->lastStatus = $status;
         $this->lastResponse = json_decode($result, true);
         return $this->lastResponse;
