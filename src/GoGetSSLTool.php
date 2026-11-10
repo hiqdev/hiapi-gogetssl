@@ -288,10 +288,10 @@ class GoGetSSLTool extends \hiapi\components\AbstractTool
             'dcv_method'        => 'dcv_method',
             'approver_email'    => 'approver_email',
             'server_count'      => function ($row) {
-                return $row['server_count'] ?: -1;
+                return ($row['server_count'] ?? null) ?: -1;
             },
             'webserver_type'    => function ($row) {
-                return ((int) $row['webserver_type']) ?: 1;
+                return ((int) ($row['webserver_type'] ?? null)) ?: 1;
             },
             'csr'               => 'csr',
             'admin_firstname'   => 'admin.first_name',
